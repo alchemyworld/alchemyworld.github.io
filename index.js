@@ -4,7 +4,7 @@
 //       element.addEventListener('click', myFunction);
 // });
 
-const items = [
+const items = [ //An array for ALL items
 	{
 		name: "water",
 		conf: "NaN",
@@ -84,10 +84,10 @@ const items = [
 	}
 ]
 
-let firstCond = document.querySelectorAll('.firstCond');
-let secondCond = document.querySelectorAll('.secondCond');
+let firstCond = document.querySelectorAll('.firstCond'); // Bolor arajin sharqum gtnvox diver@
+let secondCond = document.querySelectorAll('.secondCond'); // Bolor erkrord containerum gtnvox diver@
 
-function makeFirstRow(array) {
+function makeFirstRow(array) {  // es function-ov sarqum em arajin sharqi elementner@
 	Array.from(array).forEach(function(e) {
 		let cardDiv = document.createElement("div");
 		let cardImg = document.createElement("img");
@@ -111,7 +111,7 @@ function makeFirstRow(array) {
 	dragFirst();
 }; makeFirstRow(items);
 
-function dragFirst() {
+function dragFirst() {  //Es function-@ nra hamara vor erb mardy dragov vercni element@, ira tex@ stexcvi ayl element
 	Array.from(firstCond).forEach(function(element) {
 	element.onmousedown = function(e) {
 		let newElemId = element.id;
@@ -142,7 +142,7 @@ function dragFirst() {
 		firstCond = document.querySelectorAll('.firstCond');
 		dragFirst();
 
-		coords = {top: event.clientY, left: event.clientX};
+		coords = {top: event.clientY - 20, left: event.clientX - 25}; // Stex asum em vor miangamic sharjvi mkniki het
 		shiftX = e.pageX - coords.left;
 		shiftY = e.pageY - coords.top;
 		moveAt(e)
@@ -157,19 +157,19 @@ function dragFirst() {
 			element.style.top = e.pageY - shiftY + 'px';
 		}
 
-     	document.onmousemove = function(e) {
+     	document.onmousemove = function(e) { // stex gnuma algoritm vor stugi erku item irar het hatvum en?
      		Array.from(secondCond).forEach(function(elem) {
 	  		if(getCoords(element).top < getCoords(elem).top + elem.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(elem).top && elem !== element) {
 	  			if(getCoords(element).left < getCoords(elem).left + elem.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(elem).left) {
-	  				checkCollab(element.id, elem.id, element, elem)
+	  				checkCollab(element.id, elem.id, element, elem) // ete ayo kanchum em function, vor@ stuguma stacvum a ardyoq nor element?
 
-	  		}
-  		}
-  	})
+			  		}
+		  		}
+		  	})
      		moveAt(e);
      	};
 
-     	document.onmouseup = function() {
+     	document.onmouseup = function() { //erb mknik@ baca toxnvum element@ kangnuma
         	document.onmousemove = null;
         	document.onmouseup = null;
      	};
@@ -182,7 +182,7 @@ function dragFirst() {
 	})
 } dragFirst();
 
-function initChange() {
+function initChange() { // Drag n Drop
   secondCond = document.querySelectorAll('.secondCond');
 
   Array.from(secondCond).forEach(function(element) {
@@ -205,10 +205,10 @@ function initChange() {
 
   document.onmousemove = function(e) {
 
-  	Array.from(secondCond).forEach(function(elem) {
+  	Array.from(secondCond).forEach(function(elem) { // Algorithm
   		if(getCoords(element).top < getCoords(elem).top + elem.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(elem).top && elem !== element) {
   			if(getCoords(element).left < getCoords(elem).left + elem.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(elem).left) {
-  				checkCollab(element.id, elem.id, element, elem)
+  				checkCollab(element.id, elem.id, element, elem) // CheckCollab
   			}
   		}
   	})
@@ -241,9 +241,9 @@ function checkCollab(idF, idS, element, elem) {
 	let colf = items[idF].name;
 	let cols = items[idS].name;
 
-	Array.from(items).forEach(function(e) {
+	Array.from(items).forEach(function(e) { // stex stugum em erku dzevov unenq ardyoq nor element?
 		if(e.conf === colf && e.cons === cols ) {
-			collab(element, elem, e)
+			collab(element, elem, e) // ete unenq kanchum em function vory kjnji hin elementner@ u kpoxi norov
 		}
 		else if(e.conf === cols && e.cons === colf) {
 			collab(element, elem, e)
@@ -254,20 +254,19 @@ function checkCollab(idF, idS, element, elem) {
 function collab(element, elem, e) {
 
 	document.onmousemove = null;
-
-	let top = (element.getBoundingClientRect().top + elem.getBoundingClientRect().top) / 2;
+	let top = element.getBoundingClientRect().top;
 	let left = (element.getBoundingClientRect().left + elem.getBoundingClientRect().left) / 2;
 
 	elem.style.top = element.style.top;
 
-	elem.classList.add("animate__animated")
+	elem.classList.add("animate__animated") // Esi libary a animationneri hamar
 	element.classList.add("animate__animated")
 	elem.classList.add("animate__fadeOutLeft")
 	element.classList.add("animate__fadeOutRight")
-	setTimeout(() => {elem.remove(); element.remove();}, 750)
+	setTimeout(() => {elem.remove(); element.remove()}, 750) // stex henc animacian linuma jnjum em element@
 
 
-	let newElemId = e.id;
+	let newElemId = e.id; //Es amen inchov stexcum em nor element, hetagayum kgrvi arandzin function kyanq@ heshtacnelu hamar
 	let majorContainer = document.querySelector(".second_container")
 	let minorElement = document.createElement("div")
 	let cardImg = document.createElement("img");
@@ -287,9 +286,9 @@ function collab(element, elem, e) {
 
 	minorElement.classList.add("secondCond")
 	minorElement.classList.add("animate__animated")
-	minorElement.classList.add("animate__fadeIn")
-
-	setTimeout(() => {minorElement.classList.remove("animate__animated"); minorElement.classList.remove("animate__fadeIn")}, 1000)
+	minorElement.classList.add("animate__fadeInDown") //STEX GALISA ANIMACIA VOR@ CHI ASHXATUM, NILONI MAMAN OBSHIOV
+	// Ha che lav ashxatuma xexchi vra havayi goraci, kneres(9(((9(9 
+	setTimeout(() => {minorElement.classList.remove("animate__animated"); minorElement.classList.remove("animate__fadeInDown")}, 1000)
 
 	minorElement.style.top = top;
 	minorElement.style.left = left;
