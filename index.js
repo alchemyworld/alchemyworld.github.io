@@ -264,7 +264,7 @@ function collab(element, elem, e) {
 	element.classList.add("animate__animated")
 	elem.classList.add("animate__fadeOutLeft")
 	element.classList.add("animate__fadeOutRight")
-	setTimeout(() => {elem.remove; element.remove}, 1000)
+	setTimeout(() => {elem.remove(); element.remove();}, 750)
 
 
 	let newElemId = e.id;
