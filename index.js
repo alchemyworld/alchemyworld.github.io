@@ -55,7 +55,7 @@ const items = [ //An array for ALL items
 		id: 6
 	},
 	{
-		name: "mountain",
+		name: "mountain dew",
 		conf: "earth",
 		cons: "earth",
 		img: "https://cdn-icons-png.flaticon.com/128/619/619010.png",
@@ -87,6 +87,14 @@ const items = [ //An array for ALL items
 let firstCond = document.querySelectorAll('.firstCond'); // Bolor arajin sharqum gtnvox diver@
 let secondCond = document.querySelectorAll('.secondCond'); // Bolor erkrord containerum gtnvox diver@
 
+document.querySelector("#trash").onclick = () => {
+	Array.from(secondCond).forEach(function(e) {
+		e.classList.add("animate__animated")
+  		e.classList.add("animate__fadeOutDown")
+  		setTimeout(() => {e.remove(); secondCond = document.querySelectorAll('.secondCond');}, 500)
+	}
+)}
+
 function makeFirstRow(array) {  // es function-ov sarqum em arajin sharqi elementner@
 	Array.from(array).forEach(function(e) {
 		let cardDiv = document.createElement("div");
@@ -101,7 +109,14 @@ function makeFirstRow(array) {  // es function-ov sarqum em arajin sharqi elemen
 
 		cardImg.setAttribute("src", e.img);
 		cardDiv.setAttribute("id", e.id);
-		cardText.innerText = e.name;
+
+		if (e.name.length < 10) {
+			cardText.innerText = e.name;
+		}
+		else {
+			cardText.innerText = e.name.substring(0,7) + "...";
+		}
+		
 
 		parentFirstCont.append(cardDiv);
 		cardDiv.append(cardImg);
@@ -127,7 +142,7 @@ function dragFirst() {  //Es function-@ nra hamara vor erb mardy dragov vercni e
 
 		cardImg.setAttribute("src", items[newElemId].img);
 		majorElement.setAttribute("id", items[newElemId].id);
-		cardText.innerText = items[newElemId].name;
+		cardText.innerText = element.innerText;
 
 		majorElement.append(cardImg);
 		majorElement.append(cardText);
@@ -158,18 +173,16 @@ function dragFirst() {  //Es function-@ nra hamara vor erb mardy dragov vercni e
 		}
 
      	document.onmousemove = function(e) { // stex gnuma algoritm vor stugi erku item irar het hatvum en?
-     		Array.from(secondCond).forEach(function(elem) {
-	  		if(getCoords(element).top < getCoords(elem).top + elem.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(elem).top && elem !== element) {
-	  			if(getCoords(element).left < getCoords(elem).left + elem.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(elem).left) {
-	  				checkCollab(element.id, elem.id, element, elem) // ete ayo kanchum em function, vor@ stuguma stacvum a ardyoq nor element?
-
-			  		}
-		  		}
-		  	})
+     		
      		moveAt(e);
      	};
 
      	document.onmouseup = function() { //erb mknik@ baca toxnvum element@ kangnuma
+
+     		Array.from(secondCond).forEach(function(elem) {
+	  			checkIntersection(element, elem)
+		  	})
+
         	document.onmousemove = null;
         	document.onmouseup = null;
      	};
@@ -205,17 +218,15 @@ function initChange() { // Drag n Drop
 
   document.onmousemove = function(e) {
 
-  	Array.from(secondCond).forEach(function(elem) { // Algorithm
-  		if(getCoords(element).top < getCoords(elem).top + elem.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(elem).top && elem !== element) {
-  			if(getCoords(element).left < getCoords(elem).left + elem.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(elem).left) {
-  				checkCollab(element.id, elem.id, element, elem) // CheckCollab
-  			}
-  		}
-  	})
+  	
     moveAt(e);
   };
 
   document.onmouseup = function() {
+  	Array.from(secondCond).forEach(function(elem) { // Algorithm
+  		checkIntersection(element, elem)
+  	})
+
     document.onmousemove = null;
     document.onmouseup = null;
   };
@@ -297,3 +308,20 @@ function collab(element, elem, e) {
 	initChange();
 }
 
+function checkIntersection(element, elem) {
+	let trash = document.querySelector("#trash");
+
+	if(getCoords(element).top < getCoords(elem).top + elem.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(elem).top && elem !== element) {
+  		if(getCoords(element).left < getCoords(elem).left + elem.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(elem).left) {
+  			checkCollab(element.id, elem.id, element, elem) // CheckCollab
+  		}
+  	}
+  	if(getCoords(element).top < getCoords(trash).top + trash.offsetHeight && getCoords(element).top + element.offsetHeight > getCoords(trash).top) {
+  		if(getCoords(element).left < getCoords(trash).left + trash.offsetWidth && getCoords(element).left + element.offsetWidth > getCoords(trash).left) {
+  			element.classList.add("animate__animated")
+  			element.classList.add("animate__fadeOutDown")
+  			setTimeout(() => {element.remove(); secondCond = document.querySelectorAll('.secondCond');}, 500)
+  			
+  		}
+  	}
+}
