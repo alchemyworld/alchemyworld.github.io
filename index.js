@@ -84,6 +84,37 @@ const items = [ //An array for ALL items
 	}
 ]
 
+let userItems = [
+	{
+		name: "water",
+		conf: "NaN",
+		cons: "NaN",
+		img: "https://cdn-icons-png.flaticon.com/128/3105/3105807.png",
+		id: 0
+	},
+	{
+		name: "fire",
+		conf: "NaN",
+		cons: "NaN",
+		img: "https://cdn-icons-png.flaticon.com/128/426/426833.png",
+		id: 1
+	},
+	{
+		name: "air",
+		conf: "NaN",
+		cons: "NaN",
+		img: "https://cdn-icons-png.flaticon.com/128/2756/2756521.png",
+		id: 2
+	},
+	{
+		name: "earth",
+		conf: "NaN",
+		cons: "NaN",
+		img: "https://cdn-icons-png.flaticon.com/128/4284/4284458.png",
+		id: 3
+	}
+]
+
 let firstCond = document.querySelectorAll('.firstCond'); // Bolor arajin sharqum gtnvox diver@
 let secondCond = document.querySelectorAll('.secondCond'); // Bolor erkrord containerum gtnvox diver@
 
@@ -96,6 +127,8 @@ document.querySelector("#trash").onclick = () => {
 )}
 
 function makeFirstRow(array) {  // es function-ov sarqum em arajin sharqi elementner@
+	document.querySelector(".first_container").innerHTML = "";
+
 	Array.from(array).forEach(function(e) {
 		let cardDiv = document.createElement("div");
 		let cardImg = document.createElement("img");
@@ -124,7 +157,7 @@ function makeFirstRow(array) {  // es function-ov sarqum em arajin sharqi elemen
 	})
 	firstCond = document.querySelectorAll('.firstCond');
 	dragFirst();
-}; makeFirstRow(items);
+}; makeFirstRow(userItems);
 
 function dragFirst() {  //Es function-@ nra hamara vor erb mardy dragov vercni element@, ira tex@ stexcvi ayl element
 	Array.from(firstCond).forEach(function(element) {
@@ -140,8 +173,8 @@ function dragFirst() {  //Es function-@ nra hamara vor erb mardy dragov vercni e
 		cardImg.classList.add("image_item")
 		cardText.classList.add("text_item")
 
-		cardImg.setAttribute("src", items[newElemId].img);
-		majorElement.setAttribute("id", items[newElemId].id);
+		cardImg.setAttribute("src", userItems[newElemId].img);
+		majorElement.setAttribute("id", userItems[newElemId].id);
 		cardText.innerText = element.innerText;
 
 		majorElement.append(cardImg);
@@ -252,11 +285,13 @@ function checkCollab(idF, idS, element, elem) {
 	let colf = items[idF].name;
 	let cols = items[idS].name;
 
-	Array.from(items).forEach(function(e) { // stex stugum em erku dzevov unenq ardyoq nor element?
-		if(e.conf === colf && e.cons === cols ) {
-			collab(element, elem, e) // ete unenq kanchum em function vory kjnji hin elementner@ u kpoxi norov
+	Array.from(items).forEach(function(e) { 
+		if(e.conf === colf && e.cons === cols) {
+			checkNewElement(e, element, elem);
+			collab(element, elem, e) 
 		}
 		else if(e.conf === cols && e.cons === colf) {
+			checkNewElement(e, element, elem)
 			collab(element, elem, e)
 		}
 	});
@@ -324,4 +359,78 @@ function checkIntersection(element, elem) {
   			
   		}
   	}
+}
+
+function checkNewElement(e, firstElem, secondElem) {
+	let elementCount = 0;
+	Array.from(userItems).forEach(function(elem) { 
+		if(e.name !== elem.name) {
+			elementCount++;
+		}
+	});
+	if(elementCount === userItems.length) {
+		userItems.push(e)
+		makeFirstRow(userItems)
+		introduceNewElement(e, firstElem, secondElem);
+
+	}
+}
+
+function introduceNewElement(e, firstElem, secondElem) {
+	let introduceBox = document.querySelector('.introduce_box');
+	introduceBox.innerHTML = "";
+
+	let introduceContainer = document.querySelector('.introduce_box_container');
+
+	let plus = document.createElement("h2")
+	let equal = document.createElement('h2')
+
+	plus.innerText = "+";
+	equal.innerText = "=";
+
+	introduceContainer.style.display = "block";
+	introduceContainer.classList.add("animate__animated")
+	introduceContainer.classList.add("animate__backInDown")
+
+	setTimeout(() => { 
+		introduceContainer.classList.remove("animate__backInDown"); 
+		introduceContainer.classList.add("animate__backOutUp")
+		setTimeout(() => {
+			introduceContainer.classList.remove("animate__backOutUp"); 
+			introduceContainer.style.display = "none";
+		}, 1500)
+	}, 5000)
+
+	introduceBox.append(makeElement(firstElem, "introElement"));
+	introduceBox.append(plus);
+	introduceBox.append(makeElement(secondElem, "introElement"));
+	introduceBox.append(equal);
+	introduceBox.append(makeElement(e, "introElement"));
+}
+
+function makeElement(e, elemClass) {
+	let newElemId = e.id;
+
+	let majorElement = document.createElement("div")
+	let cardImg = document.createElement("img");
+	let cardText = document.createElement("p");
+
+	majorElement.classList.add(elemClass);
+	cardImg.classList.add("image_item")
+	cardText.classList.add("text_item")
+
+	cardImg.setAttribute("src", items[newElemId].img);
+	majorElement.setAttribute("id", items[newElemId].id);
+
+	if(typeof e.name === "string") {
+		cardText.innerText = e.name;
+	}
+	else {
+		cardText.innerText = e.innerText;
+	}
+	
+	majorElement.append(cardImg);
+	majorElement.append(cardText);
+
+	return majorElement;
 }
